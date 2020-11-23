@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.vehiclereservation.DTO.ClientDTO;
 import com.example.vehiclereservation.model.Client;
 
 import org.springframework.stereotype.Component;
@@ -37,5 +38,14 @@ public class RepositoryClient {
         }
 
         return Optional.empty();
+	}
+
+    public Client updateDTO(ClientDTO clientDTO, Client auxClient) 
+    {
+        auxClient.setName(clientDTO.getName());
+        auxClient.setAdress(clientDTO.getAdress());
+        auxClient.setCpf(clientDTO.getCpf());
+
+        return auxClient;
 	}   
 }

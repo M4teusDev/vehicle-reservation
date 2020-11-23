@@ -3,6 +3,7 @@ package com.example.vehiclereservation.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.vehiclereservation.DTO.ClientDTO;
 import com.example.vehiclereservation.model.Client;
 import com.example.vehiclereservation.repository.RepositoryClient;
 
@@ -30,5 +31,11 @@ public class ServiceClient {
         
         Optional<Client> opClient = repositoryClient.getClientByCode(code);
         return opClient.orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente nao encontrado!"));
+	}
+
+	public Client updateDTO(int code, ClientDTO clientDTO) {
+		
+		Client auxClient = getClientByCode(code); // 404 == true ? continue : break;
+		return repositoryClient.updateDTO(clientDTO, auxClient);
 	}    
 }
