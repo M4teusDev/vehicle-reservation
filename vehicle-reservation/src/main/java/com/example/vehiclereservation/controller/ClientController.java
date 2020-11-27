@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.example.vehiclereservation.DTO.ClientDTO;
 import com.example.vehiclereservation.model.Client;
+import com.example.vehiclereservation.model.Reservation;
 import com.example.vehiclereservation.service.ServiceClient;
+import com.example.vehiclereservation.service.ServiceReservation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,9 @@ public class ClientController {
 
     @Autowired
     private ServiceClient serviceClient;
+
+    @Autowired
+    private ServiceReservation serviceReservation;
 
     @PostMapping()
     public ResponseEntity<Client> saveClient(@RequestBody Client client, HttpServletRequest request, UriComponentsBuilder builder)
@@ -53,5 +58,15 @@ public class ClientController {
     public ResponseEntity<Client> updateClient(@PathVariable int code, @RequestBody ClientDTO clientDTO)
     {
         return ResponseEntity.ok(serviceClient.updateDTO(code, clientDTO));
+    }
+
+    @PostMapping("/{codeClient}/veiculos/{codeVehicle}")
+    public ResponseEntity<Reservation> saveReservation(
+                                                        @PathVariable int codeClient, @PathVariable int codeVehicle, @RequestBody Reservation reservation,
+                                                        HttpServletRequest request, UriComponentsBuilder builder
+                                                       )
+    {
+        reservation = serviceReservation.save(codeClient, codeVehicle, reservation);
+        return null;
     }
 }

@@ -28,7 +28,6 @@ public class ServiceClient {
 	}
 
 	public Client getClientByCode(int code) {
-        
         Optional<Client> opClient = repositoryClient.getClientByCode(code);
         return opClient.orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente nao encontrado!"));
 	}
@@ -36,6 +35,7 @@ public class ServiceClient {
 	public Client updateDTO(int code, ClientDTO clientDTO) {
 		
 		Client auxClient = getClientByCode(code); // 404 == true ? continue : break;
+		
 		return repositoryClient.updateDTO(clientDTO, auxClient);
 	}    
 }

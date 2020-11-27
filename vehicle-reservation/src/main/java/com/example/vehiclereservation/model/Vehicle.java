@@ -5,6 +5,7 @@ public class Vehicle {
     private int code;
     private String model;
     private float value;
+    private Boolean isRent;
 
     public int getcode() {
         return code;
@@ -28,5 +29,13 @@ public class Vehicle {
 
     public void setValue(float value) {
         this.value = value;
+    }
+
+    public Boolean getIsRent() {
+        return isRent;
+    }
+
+    public void setIsRent(Boolean isRent) {
+        this.isRent = isRent;
     }
 }
