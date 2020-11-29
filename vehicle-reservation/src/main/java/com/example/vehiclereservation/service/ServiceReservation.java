@@ -1,11 +1,13 @@
 package com.example.vehiclereservation.service;
 
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 import com.example.vehiclereservation.model.Client;
 import com.example.vehiclereservation.model.Reservation;
 import com.example.vehiclereservation.model.Vehicle;
-import com.example.vehiclereservation.repository.RepositoryClient;
 import com.example.vehiclereservation.repository.RepositoryReservation;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +25,9 @@ public class ServiceReservation {
     @Autowired
     private ServiceClient serviceClient;
 
-    @Autowired
-    private RepositoryClient repositoryClient;
 
     @Autowired
     private ServiceVehicle serviceVehicle;
-
-    // public void verifyVehicle(Vehicle vehicle)
-    // {
-    //     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Veiculo reservado!");
-    // }
 
 
     public void verifyDateOfWeek(Reservation reservation)
@@ -47,7 +42,15 @@ public class ServiceReservation {
     {
         if( repositoryReservation.verifyDate(codeVehicle,reservation) == false )
         {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Horario de atendimento - seg a sáb");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Conflito de reserva");
+        }
+    }
+
+    public void verifyIni(Reservation reservation)
+    {    
+        if(LocalDateTime.now().isAfter(reservation.getDateIni())   || reservation.getDateIni().isAfter(reservation.getDateEnd()))
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Data invalida");
         }
     }
 
@@ -56,10 +59,34 @@ public class ServiceReservation {
         Client  client   = serviceClient.getClientByCode(codeClient);
         Vehicle vehicle  = serviceVehicle.getVehicleByCode(codeVehicle);        
 
-        verifyDateOfWeek(reservation);
-        verifyDate(codeVehicle,reservation);
+        verifyDateOfWeek(reservation); //Verifica se o dia de entrega e de devolução não corresponde a um domingo
+        verifyDate(codeVehicle,reservation); //Verifica se a data para reserva, conflita com algum outro cliente
+        verifyIni(reservation); //Verifica se a data inserida é maior que a do sistema 
+        
+        repositoryReservation.saveReservation(client,vehicle,reservation);
 
         return null;
+	}
+
+	public List<Reservation> getAllReservation() {
+		return repositoryReservation.getAllReservation();
+	}
+
+	public Reservation getReservationByCode(int code) {
+        Optional<Reservation> opReservation = repositoryReservation.getReservationByCode(code);
+        return opReservation.orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva nao encontrado!"));
+	}
+
+	public List<Reservation> getReservationByClient(int code) {
+        Client client = serviceClient.getClientByCode(code);
+        Optional<List<Reservation>> reservationsOfClient = repositoryReservation.getReservationByClient(client);
+        return reservationsOfClient.orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva  do cliente nao encontrado!"));
+	}
+
+	public List<Reservation> getReservationByVehicle(int code) {
+        Vehicle vehicle = serviceVehicle.getVehicleByCode(code);
+        Optional<List<Reservation>> reservationsOfVehicle = repositoryReservation.getReservationByVehicle(vehicle);
+        return reservationsOfVehicle.orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva nao encontrado!"));
 	}
 
 

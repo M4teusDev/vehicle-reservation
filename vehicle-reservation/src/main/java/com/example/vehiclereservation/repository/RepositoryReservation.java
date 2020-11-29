@@ -2,8 +2,11 @@ package com.example.vehiclereservation.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import com.example.vehiclereservation.model.Client;
 import com.example.vehiclereservation.model.Reservation;
+import com.example.vehiclereservation.model.Vehicle;
 
 import org.springframework.stereotype.Component;
 
@@ -12,6 +15,8 @@ public class RepositoryReservation
 {
 
 	private List<Reservation> reservations = new ArrayList<Reservation>();
+	private int nextCode = 1;
+
 
 	public boolean verifyDate(int codeVehicle, Reservation reservation) 
 	{
@@ -47,6 +52,68 @@ public class RepositoryReservation
 		return true;
 	}
 
+	public void saveReservation(Client client, Vehicle vehicle, Reservation reservation) {
+		reservation.setCode(nextCode++);
+		reservation.setClient(client);
+		reservation.setVehicle(vehicle);
 
-  
+		reservations.add(reservation);
+	}
+
+	public List<Reservation> getAllReservation() {
+		return reservations;
+	}
+
+	public Optional<Reservation> getReservationByCode(int code) {
+		for(Reservation aux : reservations)
+        {
+            if(aux.getCode() == code)
+            {
+                return Optional.of(aux);
+            }
+        }
+
+        return Optional.empty();
+	}
+
+	public Optional<List<Reservation>> getReservationByClient(Client client) {
+
+		List<Reservation> reservationsOfClient = new ArrayList<Reservation>();
+
+		for(Reservation aux : reservations)
+        {
+            if(aux.getClient() == client){
+				reservationsOfClient.add(aux);
+            }
+		}
+		
+		if(reservationsOfClient.isEmpty()) {
+			return Optional.empty();
+		}
+		else {
+			return Optional.of(reservationsOfClient);
+		}
+		
+        
+	}
+
+	public Optional<List<Reservation>> getReservationByVehicle(Vehicle vehicle) {
+
+		List<Reservation> reservationsOfVehicle = new ArrayList<Reservation>();
+
+		for(Reservation aux : reservations)
+        {
+            if(aux.getVehicle() == vehicle)
+            {
+				reservationsOfVehicle.add(aux);
+            }
+		}
+		
+		if(reservationsOfVehicle.isEmpty()) {
+			return Optional.empty();
+		}
+		else {
+			return Optional.of(reservationsOfVehicle);
+		}
+	}
 }

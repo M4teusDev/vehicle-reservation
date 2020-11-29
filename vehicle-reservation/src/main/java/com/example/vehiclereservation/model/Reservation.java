@@ -1,16 +1,22 @@
 package com.example.vehiclereservation.model;
 
-
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonGetter;
 
 public class Reservation {
     
     private int code;
-    private Client client; //CODE
-    private Vehicle vehicle; //CODE
+    private Client client; 
+    private Vehicle vehicle; 
+
+    @JsonFormat(pattern = "dd/MM/yyyy@HH:mm:ss")
     private LocalDateTime dateIni;
+    @JsonFormat(pattern = "dd/MM/yyyy@HH:mm:ss")
     private LocalDateTime dateEnd;
-    //private float valueTotal;
+
+    //private float valorTotal;
 
     public int getCode() {
         return code;
@@ -50,5 +56,10 @@ public class Reservation {
 
     public void setDateEnd(LocalDateTime dateEnd) {
         this.dateEnd = dateEnd;
+    }
+
+    @JsonGetter
+    public float ValorTotal() {
+        return vehicle.getValue() * dateEnd.compareTo(dateIni);
     }
 }
