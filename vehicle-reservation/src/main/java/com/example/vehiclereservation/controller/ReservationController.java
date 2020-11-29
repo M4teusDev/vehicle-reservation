@@ -2,7 +2,7 @@ package com.example.vehiclereservation.controller;
 
 import java.util.List;
 
-import com.example.vehiclereservation.model.Reservation;
+import com.example.vehiclereservation.DTO.ReservationGetDTO;
 import com.example.vehiclereservation.service.ServiceReservation;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,26 +20,26 @@ public class ReservationController {
     private ServiceReservation serviceReservation;
 
     @GetMapping()
-    public List<Reservation> getAllReservation() 
+    public List<ReservationGetDTO> getAllReservation() 
     {
-        return serviceReservation.getAllReservation();
+        return serviceReservation.reservationsToDTO(serviceReservation.getAllReservation());
     }
 
     @GetMapping("/{code}")
-    public ResponseEntity<Reservation> getReservationByCode(@PathVariable int code)
+    public ResponseEntity<ReservationGetDTO> getReservationByCode(@PathVariable int code)
     {
-        return ResponseEntity.ok(serviceReservation.getReservationByCode(code));
+        return ResponseEntity.ok(serviceReservation.reservationToDTO(serviceReservation.getReservationByCode(code)));
     }
 
     @GetMapping("/clientes/{code}")
-    public ResponseEntity<List<Reservation>> getReservationByClient(@PathVariable int code)
+    public ResponseEntity<List<ReservationGetDTO>> getReservationByClient(@PathVariable int code)
     {
-        return ResponseEntity.ok(serviceReservation.getReservationByClient(code));
+        return ResponseEntity.ok(serviceReservation.reservationsToDTO(serviceReservation.getReservationByClient(code)));
     }
 
     @GetMapping("/veiculos/{code}")
-    public ResponseEntity<List<Reservation>> getReservationByVehicle(@PathVariable int code)
+    public ResponseEntity<List<ReservationGetDTO>> getReservationByVehicle(@PathVariable int code)
     {
-        return ResponseEntity.ok(serviceReservation.getReservationByVehicle(code));
+        return ResponseEntity.ok(serviceReservation.reservationsToDTO(serviceReservation.getReservationByVehicle(code)));
     }
 }

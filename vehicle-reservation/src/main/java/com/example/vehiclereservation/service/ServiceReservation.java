@@ -2,9 +2,11 @@ package com.example.vehiclereservation.service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.vehiclereservation.DTO.ReservationGetDTO;
 import com.example.vehiclereservation.model.Client;
 import com.example.vehiclereservation.model.Reservation;
 import com.example.vehiclereservation.model.Vehicle;
@@ -87,6 +89,36 @@ public class ServiceReservation {
         Vehicle vehicle = serviceVehicle.getVehicleByCode(code);
         Optional<List<Reservation>> reservationsOfVehicle = repositoryReservation.getReservationByVehicle(vehicle);
         return reservationsOfVehicle.orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva nao encontrado!"));
+	}
+
+	public ReservationGetDTO reservationToDTO(Reservation reservation) {
+        ReservationGetDTO reservationDTO = new ReservationGetDTO();
+        
+        reservationDTO.setClientName(reservation.getClient().getName());
+        reservationDTO.setDailyValue(reservation.getVehicle().getValue());
+        reservationDTO.setDateEnd(reservation.getDateEnd());
+        reservationDTO.setDateStart(reservation.getDateIni());
+        reservationDTO.setVehicleModel(reservation.getVehicle().getModel());
+
+        return reservationDTO;
+	}
+
+	public List<ReservationGetDTO> reservationsToDTO(List<Reservation> reservations) {
+        List<ReservationGetDTO> reservationsDTO = new ArrayList<ReservationGetDTO>();
+        ReservationGetDTO reservationDTO = new ReservationGetDTO();
+
+        for (Reservation aux : reservations){
+            reservationDTO.setClientName(aux.getClient().getName());
+            reservationDTO.setDailyValue(aux.getVehicle().getValue());
+            reservationDTO.setDateEnd(aux.getDateEnd());
+            reservationDTO.setDateStart(aux.getDateIni());
+            reservationDTO.setVehicleModel(aux.getVehicle().getModel());
+            
+            reservationsDTO.add(reservationDTO);
+        }
+        
+        
+        return reservationsDTO;
 	}
 
 
