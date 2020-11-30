@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.example.vehiclereservation.DTO.UpdateOrSaves.ClientDTO;
+import com.example.vehiclereservation.DTO.UpdateOrSaves.ReservationDTO;
 import com.example.vehiclereservation.model.Client;
 import com.example.vehiclereservation.model.Reservation;
 import com.example.vehiclereservation.service.ServiceClient;
@@ -63,12 +64,14 @@ public class ClientController {
 
     @PostMapping("/{codeClient}/veiculos/{codeVehicle}")
     public ResponseEntity<Reservation> saveReservation(
-                                                        @PathVariable int codeClient, @PathVariable int codeVehicle, @RequestBody Reservation reservation,
+                                                        @PathVariable int codeClient, @PathVariable int codeVehicle, @Valid @RequestBody ReservationDTO reservationDTO,
                                                         HttpServletRequest request, UriComponentsBuilder builder
                                                        )
     {
-        reservation = serviceReservation.save(codeClient, codeVehicle, reservation);
-        return null;
+        Reservation reservation = serviceReservation.save(codeClient, codeVehicle, reservationDTO);
+        
+        UriComponents uriComponents = builder.path(request.getRequestURI() + "/" + reservation.getCode()).build();
+        return ResponseEntity.created(uriComponents.toUri()).build();
     }
 
 }

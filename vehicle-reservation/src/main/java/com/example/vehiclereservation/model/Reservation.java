@@ -16,8 +16,6 @@ public class Reservation {
     @JsonFormat(pattern = "dd/MM/yyyy@HH:mm:ss")
     private LocalDateTime dateEnd;
 
-    //private float valorTotal;
-
     public int getCode() {
         return code;
     }

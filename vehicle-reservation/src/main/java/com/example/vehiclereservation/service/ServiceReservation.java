@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.vehiclereservation.DTO.Gets.ReservationGetDTO;
+import com.example.vehiclereservation.DTO.UpdateOrSaves.ReservationDTO;
 import com.example.vehiclereservation.model.Client;
 import com.example.vehiclereservation.model.Reservation;
 import com.example.vehiclereservation.model.Vehicle;
@@ -32,7 +33,7 @@ public class ServiceReservation {
     private ServiceVehicle serviceVehicle;
 
 
-    public void verifyDateOfWeek(Reservation reservation)
+    public void verifyDateOfWeek(ReservationDTO reservation)
     {    
         if(reservation.getDateIni().getDayOfWeek().equals(DayOfWeek.SUNDAY) || reservation.getDateEnd().getDayOfWeek().equals(DayOfWeek.SUNDAY))
         {
@@ -40,7 +41,7 @@ public class ServiceReservation {
         }
     }
 
-    private void verifyDate(int codeVehicle, Reservation reservation) 
+    private void verifyDate(int codeVehicle, ReservationDTO reservation) 
     {
         if( repositoryReservation.verifyDate(codeVehicle,reservation) == false )
         {
@@ -48,7 +49,7 @@ public class ServiceReservation {
         }
     }
 
-    public void verifyIni(Reservation reservation)
+    public void verifyIni(ReservationDTO reservation)
     {    
         if(LocalDateTime.now().isAfter(reservation.getDateIni())   || reservation.getDateIni().isAfter(reservation.getDateEnd()))
         {
@@ -56,21 +57,28 @@ public class ServiceReservation {
         }
     }
 
-	public Reservation save(int codeClient, int codeVehicle, Reservation reservation) {
+	public Reservation save(int codeClient, int codeVehicle, ReservationDTO reservationDTO) {
         
         Client  client   = serviceClient.getClientByCode(codeClient);
         Vehicle vehicle  = serviceVehicle.getVehicleByCode(codeVehicle);        
 
-        verifyDateOfWeek(reservation); //Verifica se o dia de entrega e de devolução não corresponde a um domingo
-        verifyDate(codeVehicle,reservation); //Verifica se a data para reserva, conflita com algum outro cliente
-        verifyIni(reservation); //Verifica se a data inserida é maior que a do sistema 
+        verifyDateOfWeek(reservationDTO); //Verifica se o dia de entrega e de devolução não corresponde a um domingo
+        verifyDate(codeVehicle,reservationDTO); //Verifica se a data para reserva, conflita com algum outro cliente
+        verifyIni(reservationDTO); //Verifica se a data inserida é maior que a do sistema 
         
-        repositoryReservation.saveReservation(client,vehicle,reservation);
-
-        return null;
+        return repositoryReservation.saveReservation(client,vehicle,DTOToReservation(reservationDTO));
 	}
 
-	public List<Reservation> getAllReservation() {
+	private Reservation DTOToReservation(ReservationDTO reservationDTO) {
+        Reservation reservation = new Reservation();
+
+        reservation.setDateIni(reservationDTO.getDateIni());
+        reservation.setDateEnd(reservationDTO.getDateEnd());
+
+        return reservation;
+    }
+
+    public List<Reservation> getAllReservation() {
 		return repositoryReservation.getAllReservation();
 	}
 

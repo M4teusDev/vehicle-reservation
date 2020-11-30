@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.vehiclereservation.DTO.UpdateOrSaves.ReservationDTO;
 import com.example.vehiclereservation.model.Client;
 import com.example.vehiclereservation.model.Reservation;
 import com.example.vehiclereservation.model.Vehicle;
@@ -18,7 +19,7 @@ public class RepositoryReservation
 	private int nextCode = 1;
 
 
-	public boolean verifyDate(int codeVehicle, Reservation reservation) 
+	public boolean verifyDate(int codeVehicle, ReservationDTO reservation) 
 	{
 		for(Reservation aux: reservations)
 		{
@@ -52,12 +53,14 @@ public class RepositoryReservation
 		return true;
 	}
 
-	public void saveReservation(Client client, Vehicle vehicle, Reservation reservation) {
+	public Reservation saveReservation(Client client, Vehicle vehicle, Reservation reservation) {
 		reservation.setCode(nextCode++);
 		reservation.setClient(client);
 		reservation.setVehicle(vehicle);
 
 		reservations.add(reservation);
+
+		return reservation;
 	}
 
 	public List<Reservation> getAllReservation() {
