@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.example.vehiclereservation.DTO.VehicleDTO;
+import com.example.vehiclereservation.DTO.Update.VehicleDTO;
 import com.example.vehiclereservation.model.Vehicle;
 import com.example.vehiclereservation.service.ServiceVehicle;
 

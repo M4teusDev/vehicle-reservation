@@ -3,7 +3,7 @@ package com.example.vehiclereservation.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.vehiclereservation.DTO.ClientDTO;
+import com.example.vehiclereservation.DTO.Update.ClientDTO;
 import com.example.vehiclereservation.model.Client;
 import com.example.vehiclereservation.repository.RepositoryClient;
 

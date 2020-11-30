@@ -1,4 +1,4 @@
-package com.example.vehiclereservation.DTO;
+package com.example.vehiclereservation.DTO.Gets;
 
 import java.time.LocalDateTime;
 

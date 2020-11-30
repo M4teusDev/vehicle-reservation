@@ -5,7 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import com.example.vehiclereservation.DTO.ClientDTO;
+import com.example.vehiclereservation.DTO.Update.ClientDTO;
 import com.example.vehiclereservation.model.Client;
 import com.example.vehiclereservation.model.Reservation;
 import com.example.vehiclereservation.service.ServiceClient;

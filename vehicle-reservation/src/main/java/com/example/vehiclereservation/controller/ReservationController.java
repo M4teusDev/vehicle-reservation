@@ -2,7 +2,7 @@ package com.example.vehiclereservation.controller;
 
 import java.util.List;
 
-import com.example.vehiclereservation.DTO.ReservationGetDTO;
+import com.example.vehiclereservation.DTO.Gets.ReservationGetDTO;
 import com.example.vehiclereservation.service.ServiceReservation;
 
 import org.springframework.beans.factory.annotation.Autowired;

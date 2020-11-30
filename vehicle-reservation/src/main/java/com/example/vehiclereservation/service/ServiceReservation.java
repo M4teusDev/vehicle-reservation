@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.vehiclereservation.DTO.ReservationGetDTO;
+import com.example.vehiclereservation.DTO.Gets.ReservationGetDTO;
 import com.example.vehiclereservation.model.Client;
 import com.example.vehiclereservation.model.Reservation;
 import com.example.vehiclereservation.model.Vehicle;
