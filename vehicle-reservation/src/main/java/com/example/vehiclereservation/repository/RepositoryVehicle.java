@@ -18,7 +18,6 @@ public class RepositoryVehicle {
 	public Vehicle saveVehicle(Vehicle vehicle) {
 
         vehicle.setcode(nextCode++);
-        vehicle.setIsRent(false);
         vehicles.add(vehicle);
         
         return vehicle;
