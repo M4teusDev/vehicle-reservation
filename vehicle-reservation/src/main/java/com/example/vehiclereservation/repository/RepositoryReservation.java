@@ -120,10 +120,10 @@ public class RepositoryReservation
 		}
 	}
 
-	public boolean isDeleteClientPossible(Client client) {
+	public boolean isDeleteClientPossible(Client client) {   
 		for (Reservation aux : reservations){
 			if(aux.getClient().getCode() == client.getCode())
-				return false;
+					return false;
 		}
 		return true;
 	}

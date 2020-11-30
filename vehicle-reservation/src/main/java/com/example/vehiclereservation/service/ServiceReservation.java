@@ -148,10 +148,4 @@ public class ServiceReservation {
         }
         return false;
 	}
-
-	// public void deleteReservation(Reservation reservation){
-    //     repositoryReservation.deleteReservation
-	// }
-
-
 }

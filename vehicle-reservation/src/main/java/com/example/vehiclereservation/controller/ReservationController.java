@@ -42,11 +42,4 @@ public class ReservationController {
     {
         return ResponseEntity.ok(serviceReservation.reservationsToDTO(serviceReservation.getReservationByVehicle(code)));
     }
-
-    // @DeleteMapping("/{codigo}") 
-    // public ResponseEntity<Void> deleteReservation(@PathVariable int code){
-    //     Reservation reservation = serviceReservation.getReservationByCode(code);
-    //     serviceReservation.deleteReservation(reservation);
-    //     return ResponseEntity.noContent().build();
-    // }
 }
