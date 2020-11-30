@@ -3,7 +3,7 @@ package com.example.vehiclereservation.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.vehiclereservation.DTO.Update.VehicleDTO;
+import com.example.vehiclereservation.DTO.UpdateOrSaves.VehicleDTO;
 import com.example.vehiclereservation.model.Vehicle;
 import com.example.vehiclereservation.repository.RepositoryVehicle;
 
@@ -18,9 +18,17 @@ public class ServiceVehicle {
     @Autowired
     private RepositoryVehicle repositoryVehicle;
 
-	public Vehicle saveVehicle(Vehicle vehicle) {
-        
-        return repositoryVehicle.saveVehicle(vehicle);
+	public Vehicle saveVehicle(VehicleDTO vehicleDTO) {
+        return repositoryVehicle.saveVehicle(DTOToVehicle(vehicleDTO));
+	}
+
+	private Vehicle DTOToVehicle(VehicleDTO vehicleDTO) {
+		Vehicle vehicle = new Vehicle();
+
+		vehicle.setModel(vehicleDTO.getModel());
+		vehicle.setValue(vehicleDTO.getValue());
+
+		return vehicle;
 	}
 
 	public List<Vehicle> getAllVehicles() {

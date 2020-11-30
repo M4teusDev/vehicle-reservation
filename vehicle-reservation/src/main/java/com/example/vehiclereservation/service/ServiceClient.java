@@ -3,7 +3,7 @@ package com.example.vehiclereservation.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.vehiclereservation.DTO.Update.ClientDTO;
+import com.example.vehiclereservation.DTO.UpdateOrSaves.ClientDTO;
 import com.example.vehiclereservation.model.Client;
 import com.example.vehiclereservation.repository.RepositoryClient;
 
@@ -18,9 +18,18 @@ public class ServiceClient {
     @Autowired
     private RepositoryClient repositoryClient;
 
-	public Client saveClient(Client client) {
-        
-        return repositoryClient.saveClient(client);
+	public Client saveClient(ClientDTO clientDTO) {
+        return repositoryClient.saveClient(DTOToClient(clientDTO));
+	}
+
+	public Client DTOToClient(ClientDTO clientDTO){
+		Client client = new Client();
+
+		client.setAdress(clientDTO.getAdress());
+		client.setCpf(clientDTO.getCpf());
+		client.setName(clientDTO.getName());
+
+		return client;
 	}
 
 	public List<Client> getAllClients() {

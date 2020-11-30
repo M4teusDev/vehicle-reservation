@@ -3,8 +3,9 @@ package com.example.vehiclereservation.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
-import com.example.vehiclereservation.DTO.Update.VehicleDTO;
+import com.example.vehiclereservation.DTO.UpdateOrSaves.VehicleDTO;
 import com.example.vehiclereservation.model.Vehicle;
 import com.example.vehiclereservation.service.ServiceVehicle;
 
@@ -29,9 +30,9 @@ public class VehicleController {
     private ServiceVehicle serviceVehicle;
 
     @PostMapping()
-    public ResponseEntity<Vehicle> saveVehicle(@RequestBody Vehicle vehicle, HttpServletRequest request, UriComponentsBuilder builder)
+    public ResponseEntity<Vehicle> saveVehicle(@Valid @RequestBody VehicleDTO vehicleDTO, HttpServletRequest request, UriComponentsBuilder builder)
     {
-        vehicle = serviceVehicle.saveVehicle(vehicle);
+        Vehicle vehicle = serviceVehicle.saveVehicle(vehicleDTO);
      
         UriComponents uriComponents = builder.path(request.getRequestURI() + "/" + vehicle.getcode()).build();
         return ResponseEntity.created(uriComponents.toUri()).build();
@@ -50,7 +51,7 @@ public class VehicleController {
     }
 
     @PutMapping("/{code}")
-    public ResponseEntity<Vehicle> updateVehicle(@PathVariable int code, @RequestBody VehicleDTO vehicleDTO)
+    public ResponseEntity<Vehicle> updateVehicle(@Valid @PathVariable int code, @RequestBody VehicleDTO vehicleDTO)
     {
         return ResponseEntity.ok(serviceVehicle.updateDTO(code, vehicleDTO));
     }

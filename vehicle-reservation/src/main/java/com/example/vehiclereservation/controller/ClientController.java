@@ -5,7 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import com.example.vehiclereservation.DTO.Update.ClientDTO;
+import com.example.vehiclereservation.DTO.UpdateOrSaves.ClientDTO;
 import com.example.vehiclereservation.model.Client;
 import com.example.vehiclereservation.model.Reservation;
 import com.example.vehiclereservation.service.ServiceClient;
@@ -35,9 +35,9 @@ public class ClientController {
     private ServiceReservation serviceReservation;
 
     @PostMapping()
-    public ResponseEntity<Client> saveClient(@Valid @RequestBody Client client, HttpServletRequest request, UriComponentsBuilder builder)
+    public ResponseEntity<Client> saveClient(@Valid @RequestBody ClientDTO clientDTO, HttpServletRequest request, UriComponentsBuilder builder)
     {
-        client = serviceClient.saveClient(client);
+        Client client = serviceClient.saveClient(clientDTO);
      
         UriComponents uriComponents = builder.path(request.getRequestURI() + "/" + client.getCode()).build();
         return ResponseEntity.created(uriComponents.toUri()).build();
@@ -56,7 +56,7 @@ public class ClientController {
     }
 
     @PutMapping("/{code}")
-    public ResponseEntity<Client> updateClient(@PathVariable int code, @RequestBody ClientDTO clientDTO)
+    public ResponseEntity<Client> updateClient(@PathVariable int code, @Valid @RequestBody ClientDTO clientDTO)
     {
         return ResponseEntity.ok(serviceClient.updateDTO(code, clientDTO));
     }

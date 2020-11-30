@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.vehiclereservation.DTO.Update.VehicleDTO;
+import com.example.vehiclereservation.DTO.UpdateOrSaves.VehicleDTO;
 import com.example.vehiclereservation.model.Vehicle;
 
 import org.springframework.stereotype.Component;
