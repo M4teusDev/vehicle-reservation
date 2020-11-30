@@ -129,5 +129,12 @@ public class ServiceReservation {
         return reservationsDTO;
 	}
 
+	public boolean isDeleteClientPossible(Client client) {
+        if (repositoryReservation.isDeleteClientPossible(client)){
+            return true;
+        }
+        return false;
+	}
+
 
 }

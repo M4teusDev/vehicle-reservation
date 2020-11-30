@@ -119,4 +119,12 @@ public class RepositoryReservation
 			return Optional.of(reservationsOfVehicle);
 		}
 	}
+
+	public boolean isDeleteClientPossible(Client client) {
+		for (Reservation aux : reservations){
+			if(aux.getClient().getCode() == client.getCode())
+				return false;
+		}
+		return true;
+	}
 }

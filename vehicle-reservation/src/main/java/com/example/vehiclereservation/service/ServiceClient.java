@@ -16,7 +16,10 @@ import org.springframework.web.server.ResponseStatusException;
 public class ServiceClient {
 
     @Autowired
-    private RepositoryClient repositoryClient;
+	private RepositoryClient repositoryClient;
+	
+	@Autowired
+	private ServiceReservation serviceReservation;
 
 	public Client saveClient(ClientDTO clientDTO) {
         return repositoryClient.saveClient(DTOToClient(clientDTO));
@@ -46,5 +49,19 @@ public class ServiceClient {
 		Client auxClient = getClientByCode(code); // 404 == true ? continue : break;
 		
 		return repositoryClient.updateDTO(clientDTO, auxClient);
-	}    
+	}
+
+	public void deleteClient(Client client) {
+		if (isDeleteClientPossible(client) == false){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é possivel deletar, o cliente tem reservas pendentes!");
+		}
+		repositoryClient.deleteClient(client);
+	}
+
+	private boolean isDeleteClientPossible(Client client) {
+		if (serviceReservation.isDeleteClientPossible(client)){
+			return true;
+		}
+		return false;
+	}
 }

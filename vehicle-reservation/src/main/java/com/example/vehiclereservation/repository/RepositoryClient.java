@@ -47,5 +47,9 @@ public class RepositoryClient {
         auxClient.setCpf(clientDTO.getCpf());
 
         return auxClient;
+	}
+
+	public void deleteClient(Client client) {
+        clients.remove(client);
 	}   
 }
