@@ -46,5 +46,9 @@ public class RepositoryVehicle {
         auxVehicle.setValue(VehicleDTO.getValue());
 
         return auxVehicle;
+	}
+
+	public void deleteVehicle(Vehicle vehicle) {
+        vehicles.remove(vehicle);
 	}      
 }

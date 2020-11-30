@@ -127,4 +127,12 @@ public class RepositoryReservation
 		}
 		return true;
 	}
+
+	public boolean isDeleteVehiclePossible(Vehicle vehicle) {
+		for (Reservation aux : reservations){
+			if (aux.getVehicle().getcode() == vehicle.getcode())
+				return false;
+		}
+		return true;
+	}
 }

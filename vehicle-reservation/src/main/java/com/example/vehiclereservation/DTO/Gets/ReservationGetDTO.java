@@ -10,6 +10,7 @@ public class ReservationGetDTO {
     private String  clientName;
     private String  vehicleModel;
     private float   dailyValue;
+    private float   totalValue;
 
     @JsonFormat(pattern = "dd/MM/yyyy@HH:mm:ss")
     private LocalDateTime dateStart;
@@ -61,6 +62,14 @@ public class ReservationGetDTO {
     @JsonGetter
     public float ValorTotal() {
         return dailyValue * dateEnd.compareTo(dateStart);
+    }
+
+    public float getTotalValue() {
+        return totalValue;
+    }
+
+    public void setTotalValue(float totalValue) {
+        this.totalValue = totalValue;
     }
     
 }

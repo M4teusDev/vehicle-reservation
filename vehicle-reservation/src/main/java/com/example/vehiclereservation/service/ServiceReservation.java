@@ -2,6 +2,7 @@ package com.example.vehiclereservation.service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -101,7 +102,10 @@ public class ServiceReservation {
 
 	public ReservationGetDTO reservationToDTO(Reservation reservation) {
         ReservationGetDTO reservationDTO = new ReservationGetDTO();
-        
+        float totalValue = (ChronoUnit.DAYS.between(reservation.getDateIni(), reservation.getDateEnd()) * reservation.getVehicle().getValue());
+
+
+        reservationDTO.setTotalValue(totalValue);
         reservationDTO.setClientName(reservation.getClient().getName());
         reservationDTO.setDailyValue(reservation.getVehicle().getValue());
         reservationDTO.setDateEnd(reservation.getDateEnd());
@@ -116,6 +120,8 @@ public class ServiceReservation {
         ReservationGetDTO reservationDTO = new ReservationGetDTO();
 
         for (Reservation aux : reservations){
+
+            reservationDTO.setTotalValue((ChronoUnit.DAYS.between(aux.getDateIni(), aux.getDateEnd()) * aux.getVehicle().getValue()));
             reservationDTO.setClientName(aux.getClient().getName());
             reservationDTO.setDailyValue(aux.getVehicle().getValue());
             reservationDTO.setDateEnd(aux.getDateEnd());
@@ -135,6 +141,17 @@ public class ServiceReservation {
         }
         return false;
 	}
+
+	public boolean isDeleteVehiclePossible(Vehicle vehicle) {
+        if(repositoryReservation.isDeleteVehiclePossible(vehicle)){
+            return true;
+        }
+        return false;
+	}
+
+	// public void deleteReservation(Reservation reservation){
+    //     repositoryReservation.deleteReservation
+	// }
 
 
 }

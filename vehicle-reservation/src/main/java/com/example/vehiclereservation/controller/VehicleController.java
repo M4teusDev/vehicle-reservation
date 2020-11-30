@@ -11,6 +11,7 @@ import com.example.vehiclereservation.service.ServiceVehicle;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,6 +55,13 @@ public class VehicleController {
     public ResponseEntity<Vehicle> updateVehicle(@Valid @PathVariable int code, @RequestBody VehicleDTO vehicleDTO)
     {
         return ResponseEntity.ok(serviceVehicle.updateDTO(code, vehicleDTO));
+    }
+
+    @DeleteMapping("/{code}")
+    public ResponseEntity<Void> deleteVehicle(@PathVariable int code){
+        Vehicle vehicle = serviceVehicle.getVehicleByCode(code);
+        serviceVehicle.deleteVehicle(vehicle);
+        return ResponseEntity.noContent().build();
     }
     
 }

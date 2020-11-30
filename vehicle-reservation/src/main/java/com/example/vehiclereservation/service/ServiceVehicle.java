@@ -16,7 +16,10 @@ import org.springframework.web.server.ResponseStatusException;
 public class ServiceVehicle {
     
     @Autowired
-    private RepositoryVehicle repositoryVehicle;
+	private RepositoryVehicle repositoryVehicle;
+	
+	@Autowired
+	private ServiceReservation serviceReservation;
 
 	public Vehicle saveVehicle(VehicleDTO vehicleDTO) {
         return repositoryVehicle.saveVehicle(DTOToVehicle(vehicleDTO));
@@ -45,5 +48,12 @@ public class ServiceVehicle {
 		
 		Vehicle auxVehicle = getVehicleByCode(code); // 404 == true ? continue : break;
 		return repositoryVehicle.updateDTO(vehicleDTO, auxVehicle);
+	}
+
+	public void deleteVehicle(Vehicle vehicle) {
+		if(serviceReservation.isDeleteVehiclePossible(vehicle) == false){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é possivel deletar o veiculo pois existem reservas pendentes");
+		}
+		repositoryVehicle.deleteVehicle(vehicle);
 	}    
 }
