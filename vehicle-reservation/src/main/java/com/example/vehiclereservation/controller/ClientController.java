@@ -3,6 +3,7 @@ package com.example.vehiclereservation.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import com.example.vehiclereservation.DTO.ClientDTO;
 import com.example.vehiclereservation.model.Client;
@@ -34,7 +35,7 @@ public class ClientController {
     private ServiceReservation serviceReservation;
 
     @PostMapping()
-    public ResponseEntity<Client> saveClient(@RequestBody Client client, HttpServletRequest request, UriComponentsBuilder builder)
+    public ResponseEntity<Client> saveClient(@Valid @RequestBody Client client, HttpServletRequest request, UriComponentsBuilder builder)
     {
         client = serviceClient.saveClient(client);
      

@@ -3,6 +3,7 @@ package com.example.vehiclereservation.DTO;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonGetter;
 
 public class ReservationGetDTO {
 
@@ -14,6 +15,8 @@ public class ReservationGetDTO {
     private LocalDateTime dateStart;
     @JsonFormat(pattern = "dd/MM/yyyy@HH:mm:ss")
     private LocalDateTime dateEnd;
+
+
 
     public String getClientName() {
         return clientName;
@@ -55,5 +58,9 @@ public class ReservationGetDTO {
         this.dateEnd = dateEnd;
     }
 
+    @JsonGetter
+    public float ValorTotal() {
+        return dailyValue * dateEnd.compareTo(dateStart);
+    }
     
 }
