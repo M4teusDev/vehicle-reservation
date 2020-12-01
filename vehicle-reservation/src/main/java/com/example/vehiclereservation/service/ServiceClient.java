@@ -22,7 +22,7 @@ public class ServiceClient {
 	private ServiceReservation serviceReservation;
 
 	public Client saveClient(ClientDTO clientDTO) {
-        return repositoryClient.saveClient(DTOToClient(clientDTO));
+        return repositoryClient.saveClient(DTOToClient(clientDTO)); //Antes de enviar para o repositorio transforma clienteDTO em cliente
 	}
 
 	public Client DTOToClient(ClientDTO clientDTO){
@@ -45,23 +45,12 @@ public class ServiceClient {
 	}
 
 	public Client updateDTO(int code, ClientDTO clientDTO) {
-		
-		Client auxClient = getClientByCode(code); // 404 == true ? continue : break;
-		
-		return repositoryClient.updateDTO(clientDTO, auxClient);
+		return repositoryClient.updateDTO(clientDTO, getClientByCode(code));
 	}
 
-	public void deleteClient(Client client) {
-		if (isDeleteClientPossible(client) == false){
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é possivel deletar, o cliente tem reservas pendentes!");
-		}
+	public void deleteClient(int code) {
+		Client client = getClientByCode(code);
+		serviceReservation.verifyPossibilityToDelete(client);
 		repositoryClient.deleteClient(client);
-	}
-
-	private boolean isDeleteClientPossible(Client client) {
-		if (serviceReservation.isDeleteClientPossible(client)){
-			return true;
-		}
-		return false;
 	}
 }

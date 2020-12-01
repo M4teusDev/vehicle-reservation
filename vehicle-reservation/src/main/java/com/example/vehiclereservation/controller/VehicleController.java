@@ -59,9 +59,7 @@ public class VehicleController {
 
     @DeleteMapping("/{code}")
     public ResponseEntity<Void> deleteVehicle(@PathVariable int code){
-        Vehicle vehicle = serviceVehicle.getVehicleByCode(code);
-        serviceVehicle.deleteVehicle(vehicle);
+        serviceVehicle.deleteVehicle(code);
         return ResponseEntity.noContent().build();
     }
-    
 }

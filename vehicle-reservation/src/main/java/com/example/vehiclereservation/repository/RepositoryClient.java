@@ -30,12 +30,8 @@ public class RepositoryClient {
 	public Optional<Client> getClientByCode(int code) {
         
         for(Client aux : clients)
-        {
             if(aux.getCode() == code)
-            {
                 return Optional.of(aux);
-            }
-        }
 
         return Optional.empty();
 	}

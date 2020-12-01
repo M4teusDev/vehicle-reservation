@@ -3,19 +3,19 @@ package com.example.vehiclereservation.DTO.UpdateOrSaves;
 import java.time.LocalDateTime;
 
 import javax.validation.constraints.FutureOrPresent;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class ReservationDTO {
 
     @FutureOrPresent
-    @NotEmpty(message = "Data de finalização necessária") 
+    @NotNull(message = "Data inicial necessária")
     @JsonFormat(pattern = "dd/MM/yyyy@HH:mm:ss")
     private LocalDateTime dateIni;
 
     @FutureOrPresent 
-    @NotEmpty(message = "Data de finalização necessária")
+    @NotNull(message = "Data de finalização necessária")
     @JsonFormat(pattern = "dd/MM/yyyy@HH:mm:ss")
     private LocalDateTime dateEnd;
 
@@ -34,6 +34,4 @@ public class ReservationDTO {
     public void setDateEnd(LocalDateTime dateEnd) {
         this.dateEnd = dateEnd;
     }
-
-    
 }

@@ -1,5 +1,6 @@
 package com.example.vehiclereservation.repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class RepositoryReservation 
 {
-
 	private List<Reservation> reservations = new ArrayList<Reservation>();
 	private int nextCode = 1;
 
@@ -57,9 +57,7 @@ public class RepositoryReservation
 		reservation.setCode(nextCode++);
 		reservation.setClient(client);
 		reservation.setVehicle(vehicle);
-
 		reservations.add(reservation);
-
 		return reservation;
 	}
 
@@ -68,14 +66,11 @@ public class RepositoryReservation
 	}
 
 	public Optional<Reservation> getReservationByCode(int code) {
-		for(Reservation aux : reservations)
-        {
-            if(aux.getCode() == code)
-            {
-                return Optional.of(aux);
-            }
-        }
 
+		for(Reservation aux : reservations) 
+            if(aux.getCode() == code) 
+                return Optional.of(aux);
+        
         return Optional.empty();
 	}
 
@@ -83,56 +78,45 @@ public class RepositoryReservation
 
 		List<Reservation> reservationsOfClient = new ArrayList<Reservation>();
 
-		for(Reservation aux : reservations)
-        {
-            if(aux.getClient() == client){
+		for(Reservation aux : reservations) 
+            if(aux.getClient() == client)
 				reservationsOfClient.add(aux);
-            }
-		}
 		
-		if(reservationsOfClient.isEmpty()) {
-			return Optional.empty();
-		}
-		else {
-			return Optional.of(reservationsOfClient);
-		}
-		
-        
+		if(reservationsOfClient.isEmpty()) return Optional.empty();
+		else return Optional.of(reservationsOfClient);
 	}
 
 	public Optional<List<Reservation>> getReservationByVehicle(Vehicle vehicle) {
 
 		List<Reservation> reservationsOfVehicle = new ArrayList<Reservation>();
 
-		for(Reservation aux : reservations)
-        {
+		for(Reservation aux : reservations) 
             if(aux.getVehicle() == vehicle)
-            {
 				reservationsOfVehicle.add(aux);
-            }
-		}
 		
-		if(reservationsOfVehicle.isEmpty()) {
-			return Optional.empty();
-		}
-		else {
-			return Optional.of(reservationsOfVehicle);
-		}
+		if(reservationsOfVehicle.isEmpty()) return Optional.empty(); 
+		else  return Optional.of(reservationsOfVehicle);
 	}
 
-	public boolean isDeleteClientPossible(Client client) {   
-		for (Reservation aux : reservations){
-			if(aux.getClient().getCode() == client.getCode())
-					return false;
-		}
+	public boolean verifyPossibilityToDelete(Client client) {
+
+		LocalDateTime today = LocalDateTime.now();
+
+		for(Reservation aux: reservations)
+			if(aux.getClient() == client)
+				if( aux.getDateEnd().isAfter(today) ||aux.getDateIni().isAfter(today) || aux.getDateIni().equals(today) ||aux.getDateEnd().equals(today) )
+						return false;
 		return true;
 	}
 
-	public boolean isDeleteVehiclePossible(Vehicle vehicle) {
-		for (Reservation aux : reservations){
-			if (aux.getVehicle().getcode() == vehicle.getcode())
-				return false;
-		}
+	public boolean verifyPossibilityToDeleteVheicle(Vehicle vehicle) {
+
+		LocalDateTime today = LocalDateTime.now();
+		
+		for(Reservation aux: reservations)
+			if(aux.getVehicle() == vehicle)
+				if( aux.getDateEnd().isAfter(today) ||aux.getDateIni().isAfter(today) || aux.getDateIni().equals(today) ||aux.getDateEnd().equals(today) )
+						return false;
 		return true;
 	}
 }

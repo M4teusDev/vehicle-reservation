@@ -29,36 +29,10 @@ public class ServiceReservation {
     @Autowired
     private ServiceClient serviceClient;
 
-
     @Autowired
     private ServiceVehicle serviceVehicle;
 
-
-    public void verifyDateOfWeek(ReservationDTO reservation)
-    {    
-        if(reservation.getDateIni().getDayOfWeek().equals(DayOfWeek.SUNDAY) || reservation.getDateEnd().getDayOfWeek().equals(DayOfWeek.SUNDAY))
-        {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Horario de atendimento - seg a sáb");
-        }
-    }
-
-    private void verifyDate(int codeVehicle, ReservationDTO reservation) 
-    {
-        if( repositoryReservation.verifyDate(codeVehicle,reservation) == false )
-        {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Conflito de reserva");
-        }
-    }
-
-    public void verifyIni(ReservationDTO reservation)
-    {    
-        if(LocalDateTime.now().isAfter(reservation.getDateIni())   || reservation.getDateIni().isAfter(reservation.getDateEnd()))
-        {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Data invalida");
-        }
-    }
-
-	public Reservation save(int codeClient, int codeVehicle, ReservationDTO reservationDTO) {
+    public Reservation save(int codeClient, int codeVehicle, ReservationDTO reservationDTO) {
         
         Client  client   = serviceClient.getClientByCode(codeClient);
         Vehicle vehicle  = serviceVehicle.getVehicleByCode(codeVehicle);        
@@ -70,7 +44,29 @@ public class ServiceReservation {
         return repositoryReservation.saveReservation(client,vehicle,DTOToReservation(reservationDTO));
 	}
 
+    public void verifyDateOfWeek(ReservationDTO reservation)
+    {    
+        if(reservation.getDateIni().getDayOfWeek().equals(DayOfWeek.SUNDAY) || reservation.getDateEnd().getDayOfWeek().equals(DayOfWeek.SUNDAY)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Horario de atendimento - seg a sáb");
+        }
+    }
+
+    private void verifyDate(int codeVehicle, ReservationDTO reservation) 
+    {
+        if( repositoryReservation.verifyDate(codeVehicle,reservation) == false ){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Conflito de reserva");
+        }
+    }
+
+    public void verifyIni(ReservationDTO reservation)
+    {   
+        if(LocalDateTime.now().isAfter(reservation.getDateIni())   || reservation.getDateIni().isAfter(reservation.getDateEnd())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Data invalida");
+        }
+    }
+
 	private Reservation DTOToReservation(ReservationDTO reservationDTO) {
+
         Reservation reservation = new Reservation();
 
         reservation.setDateIni(reservationDTO.getDateIni());
@@ -89,23 +85,20 @@ public class ServiceReservation {
 	}
 
 	public List<Reservation> getReservationByClient(int code) {
-        Client client = serviceClient.getClientByCode(code);
-        Optional<List<Reservation>> reservationsOfClient = repositoryReservation.getReservationByClient(client);
+        Optional<List<Reservation>> reservationsOfClient = repositoryReservation.getReservationByClient(serviceClient.getClientByCode(code));
         return reservationsOfClient.orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva  do cliente nao encontrado!"));
 	}
 
 	public List<Reservation> getReservationByVehicle(int code) {
-        Vehicle vehicle = serviceVehicle.getVehicleByCode(code);
-        Optional<List<Reservation>> reservationsOfVehicle = repositoryReservation.getReservationByVehicle(vehicle);
+        Optional<List<Reservation>> reservationsOfVehicle = repositoryReservation.getReservationByVehicle(serviceVehicle.getVehicleByCode(code));
         return reservationsOfVehicle.orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva nao encontrado!"));
 	}
 
-	public ReservationGetDTO reservationToDTO(Reservation reservation) {
+	public ReservationGetDTO reservationToDTO(Reservation reservation) { //Apenas 1 reserva
+
         ReservationGetDTO reservationDTO = new ReservationGetDTO();
-        float totalValue = (ChronoUnit.DAYS.between(reservation.getDateIni(), reservation.getDateEnd()) * reservation.getVehicle().getValue());
-
-
-        reservationDTO.setTotalValue(totalValue);
+       
+        reservationDTO.setTotalValue(ChronoUnit.DAYS.between(reservation.getDateIni(), reservation.getDateEnd()) * reservation.getVehicle().getValue());
         reservationDTO.setClientName(reservation.getClient().getName());
         reservationDTO.setDailyValue(reservation.getVehicle().getValue());
         reservationDTO.setDateEnd(reservation.getDateEnd());
@@ -115,7 +108,8 @@ public class ServiceReservation {
         return reservationDTO;
 	}
 
-	public List<ReservationGetDTO> reservationsToDTO(List<Reservation> reservations) {
+	public List<ReservationGetDTO> reservationsToDTO(List<Reservation> reservations) { 
+        
         List<ReservationGetDTO> reservationsDTO = new ArrayList<ReservationGetDTO>();
         ReservationGetDTO reservationDTO = new ReservationGetDTO();
 
@@ -131,21 +125,16 @@ public class ServiceReservation {
             reservationsDTO.add(reservationDTO);
         }
         
-        
         return reservationsDTO;
 	}
 
-	public boolean isDeleteClientPossible(Client client) {
-        if (repositoryReservation.isDeleteClientPossible(client)){
-            return true;
-        }
-        return false;
+	public void verifyPossibilityToDelete(Client client) {
+        if(!repositoryReservation.verifyPossibilityToDelete(client))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Impossivel deletar, cliente possuiu reservas");
 	}
 
-	public boolean isDeleteVehiclePossible(Vehicle vehicle) {
-        if(repositoryReservation.isDeleteVehiclePossible(vehicle)){
-            return true;
-        }
-        return false;
+	public void verifyPossibilityToDeleteVheicle(Vehicle vehicle) {
+        if(!repositoryReservation.verifyPossibilityToDeleteVheicle(vehicle))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Impossivel deletar, veiculo possuiu reservas");
 	}
 }

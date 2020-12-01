@@ -20,14 +20,12 @@ public class ReservationController {
     private ServiceReservation serviceReservation;
 
     @GetMapping()
-    public List<ReservationGetDTO> getAllReservation() 
-    {
+    public List<ReservationGetDTO> getAllReservation() {
         return serviceReservation.reservationsToDTO(serviceReservation.getAllReservation());
     }
 
     @GetMapping("/{code}")
-    public ResponseEntity<ReservationGetDTO> getReservationByCode(@PathVariable int code)
-    {
+    public ResponseEntity<ReservationGetDTO> getReservationByCode(@PathVariable int code) {
         return ResponseEntity.ok(serviceReservation.reservationToDTO(serviceReservation.getReservationByCode(code)));
     }
 

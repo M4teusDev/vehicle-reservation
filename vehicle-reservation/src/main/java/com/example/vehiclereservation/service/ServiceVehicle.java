@@ -39,21 +39,17 @@ public class ServiceVehicle {
 	}
 
 	public Vehicle getVehicleByCode(int code) {
-        
         Optional<Vehicle> opVehicle = repositoryVehicle.getVehicleByCode(code);
         return opVehicle.orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle nao encontrado!"));
 	}
 
 	public Vehicle updateDTO(int code, VehicleDTO vehicleDTO) {
-		
-		Vehicle auxVehicle = getVehicleByCode(code); // 404 == true ? continue : break;
-		return repositoryVehicle.updateDTO(vehicleDTO, auxVehicle);
+		return repositoryVehicle.updateDTO(vehicleDTO, getVehicleByCode(code));
 	}
 
-	public void deleteVehicle(Vehicle vehicle) {
-		if(serviceReservation.isDeleteVehiclePossible(vehicle) == false){
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é possivel deletar o veiculo pois existem reservas pendentes");
-		}
+	public void deleteVehicle(int code) {
+		Vehicle vehicle = getVehicleByCode(code);
+		serviceReservation.verifyPossibilityToDeleteVheicle(vehicle);
 		repositoryVehicle.deleteVehicle(vehicle);
-	}    
+	}  
 }

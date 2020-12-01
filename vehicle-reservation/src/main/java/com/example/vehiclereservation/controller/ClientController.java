@@ -77,9 +77,7 @@ public class ClientController {
 
     @DeleteMapping("/{code}")
     public ResponseEntity<Void> deleteClient(@PathVariable int code){
-        Client client = serviceClient.getClientByCode(code);
-        serviceClient.deleteClient(client);
+        serviceClient.deleteClient(code);
         return ResponseEntity.noContent().build();
     }
-
 }

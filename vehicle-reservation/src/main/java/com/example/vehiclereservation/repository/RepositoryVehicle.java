@@ -16,10 +16,8 @@ public class RepositoryVehicle {
     private static int nextCode = 1;
 
 	public Vehicle saveVehicle(Vehicle vehicle) {
-
         vehicle.setcode(nextCode++);
-        vehicles.add(vehicle);
-        
+        vehicles.add(vehicle); 
         return vehicle;
     }
 
@@ -30,12 +28,8 @@ public class RepositoryVehicle {
 	public Optional<Vehicle> getVehicleByCode(int code) {
         
         for(Vehicle aux : vehicles)
-        {
             if(aux.getcode() == code)
-            {
                 return Optional.of(aux);
-            }
-        }
 
         return Optional.empty();
 	}
