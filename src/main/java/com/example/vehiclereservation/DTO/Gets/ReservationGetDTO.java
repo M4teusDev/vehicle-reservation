@@ -59,11 +59,6 @@ public class ReservationGetDTO {
         this.dateEnd = dateEnd;
     }
 
-    @JsonGetter
-    public float ValorTotal() {
-        return dailyValue * dateEnd.compareTo(dateStart);
-    }
-
     public float getTotalValue() {
         return totalValue;
     }
