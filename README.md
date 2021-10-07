@@ -1,8 +1,10 @@
 # vehicle reservation
  
-Desenvolva uma aplicação do tipo API Web RestFul que permita gerenciar reservas de veículos. A aplicação deverá permitir  **Prazo de entrega - 01/12**:
+aplicação do tipo API Web RestFul que permita gerenciar reservas de veículos. 
 
-Model - **Prazo 21/11**
+A aplicação deverá permitir:
+
+Model - 
 
 1. Gerenciar Veículos-CRUD (**Model OK)**
     1. Código
@@ -14,13 +16,13 @@ Model - **Prazo 21/11**
     3. Endereço
     4. CPF
 
-Controler e Service - **Prazo 21/11**
+Controler e Service - 
 
 (Create, Save,  Upade e Delete)
 
-Repository - **Prazo 22/11**
+Repository - 
 
-1. Fazer uma reserva de um veículo por um cliente. A reserva deverá ter **Prazo 23/11 a 24/11**: 
+1. Fazer uma reserva de um veículo por um cliente. A reserva deverá ter 
     1. Tem um número - OK
     2. Cliente deverá existir. - OK
     3. Veículo deverá existir. - OK
@@ -32,8 +34,4 @@ Repository - **Prazo 22/11**
 3. Listar as reservas de um cliente.
 4. Listar as reservas de um veículo
 
-Itens Obrigatórios:
 
-- Projeto deverá estar em um repositório GIT e enviar o link. - **EM ANDAMENTO**
-- Validar todos os dados de cadastro e alteração. Usar @Valid e Constrains
-- Usar o padrão DTO em pelo menos um recurso.
